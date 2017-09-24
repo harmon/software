@@ -17,9 +17,6 @@ bob@cogwheel.com
 
 Notes here: https://goo.gl/wGexz4
 
-"""
-
-"""
 constants and localizations are kept in
 
 config.py
@@ -268,8 +265,7 @@ api = Api(app)
 logger = logging.getLogger()
 
 setup_logger()
-api.add_resource(GetAuthRest, '/novapass/api/v1.0/getauth',
-                 endpoint='getauth')
+api.add_resource(GetAuthRest, '/novapass/api/v1.0/getauth', endpoint='getauth')
 api.add_resource(LogRest, '/novapass/api/v1.0/log', endpoint='log')
 sys.stderr.write('Starting up')
 
