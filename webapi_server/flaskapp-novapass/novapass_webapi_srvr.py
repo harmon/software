@@ -1,5 +1,4 @@
 import config  # make good on what we just explained
-from flask import Flask, request
 from flask_restful import Resource, Api, reqparse
 import logging
 # for creating self-managing log files
@@ -8,6 +7,9 @@ from logging import Formatter  # for setting logger formats
 
 import sys  # for stderr.write
 import socket  # for gethostname
+from datetime import datetime
+from app import get_app
+from models import db, Log
 
 """
 
@@ -168,7 +170,6 @@ def getauth_process():
     RESTful calls from readers asking for card authorization come here
     """
     global logger
-    global request
 
     p = reqparse.RequestParser()
 
@@ -242,6 +243,9 @@ def log_process():
 
     logger.info('tool_id:' + args['tool_id'] + ',' + args['message'])
 
+    new_log = Log(message=args['message'], timestamp=datetime.utcnow())
+    db.session.add(new_log)
+    db.session.commit()
     return log_respond(0, 'ok: log posted')
 
 
@@ -260,7 +264,7 @@ class LogRest(Resource):
         return log_process()
 
 # ----- setup basic flask app
-app = Flask(__name__)
+app = get_app()
 api = Api(app)
 logger = logging.getLogger()
 
